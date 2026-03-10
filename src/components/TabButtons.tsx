@@ -6,15 +6,15 @@ interface TabButtonsProps {
 
 export function TabButtons({ tabs, active, onChange }: TabButtonsProps) {
   return (
-    <div className="flex gap-2 mb-3">
+    <div className="flex gap-1 mb-4 bg-secondary rounded-lg p-1">
       {tabs.map(([key, label]) => (
         <button
           key={key}
           onClick={() => onChange(key)}
-          className={`px-3.5 py-1.5 rounded-md text-[12px] font-semibold transition-all border-none cursor-pointer ${
+          className={`px-4 py-2 rounded-md text-[13px] font-medium transition-all border-none cursor-pointer ${
             active === key
-              ? "bg-primary text-primary-foreground"
-              : "bg-secondary text-muted-foreground hover:text-foreground"
+              ? "bg-card text-foreground shadow-apple"
+              : "bg-transparent text-muted-foreground hover:text-foreground"
           }`}
         >
           {label}

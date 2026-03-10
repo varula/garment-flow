@@ -11,7 +11,7 @@ export function TaktBar() {
 
   return (
     <div
-      className={`h-full ${color} transition-all duration-100`}
+      className={`h-full ${color} transition-all duration-100 rounded-r-full`}
       style={{ width: `${w}%` }}
     />
   );

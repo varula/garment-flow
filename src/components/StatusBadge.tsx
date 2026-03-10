@@ -6,13 +6,13 @@ interface StatusBadgeProps {
 }
 
 const colorClasses: Record<string, string> = {
-  primary: "bg-primary/15 text-primary border-primary/30",
-  destructive: "bg-destructive/15 text-destructive border-destructive/30",
-  warning: "bg-warning/15 text-warning border-warning/30",
-  success: "bg-success/15 text-success border-success/30",
-  info: "bg-info/15 text-info border-info/30",
-  cyan: "bg-cyan/15 text-cyan border-cyan/30",
-  "muted-foreground": "bg-muted text-muted-foreground border-border",
+  primary: "bg-primary/10 text-primary",
+  destructive: "bg-destructive/10 text-destructive",
+  warning: "bg-warning/10 text-warning",
+  success: "bg-success/10 text-success",
+  info: "bg-info/10 text-info",
+  cyan: "bg-cyan/10 text-cyan",
+  "muted-foreground": "bg-secondary text-muted-foreground",
 };
 
 export function StatusBadge({ label, colorOverride }: StatusBadgeProps) {
@@ -20,7 +20,7 @@ export function StatusBadge({ label, colorOverride }: StatusBadgeProps) {
   const classes = colorClasses[colorKey] || colorClasses["muted-foreground"];
 
   return (
-    <span className={`inline-block px-2 py-0.5 text-[11px] font-semibold rounded border tracking-wider ${classes}`}>
+    <span className={`inline-block px-2.5 py-1 text-[11px] font-semibold rounded-full ${classes}`}>
       {label}
     </span>
   );
