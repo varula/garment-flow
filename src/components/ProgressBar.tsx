@@ -13,7 +13,7 @@ export function ProgressBar({ value, max, colorClass, height = 6 }: ProgressBarP
   return (
     <div className="bg-secondary rounded-full overflow-hidden min-w-[80px]" style={{ height }}>
       <div
-        className={`h-full rounded-full transition-all duration-400 ${barColor}`}
+        className={`h-full rounded-full transition-all duration-500 ${barColor}`}
         style={{ width: `${pctVal}%` }}
       />
     </div>

@@ -4,14 +4,14 @@ import { NavRail } from "./NavRail";
 import { TaktBar } from "./TaktBar";
 
 const MODULE_NAMES: Record<string, { icon: string; label: string }> = {
-  "/": { icon: "🏭", label: "PRODUCTION" },
-  "/cutting": { icon: "✂️", label: "CUTTING" },
-  "/sewing": { icon: "🧵", label: "SEWING" },
-  "/finishing": { icon: "💧", label: "FINISHING" },
-  "/quality": { icon: "✅", label: "QUALITY" },
-  "/store": { icon: "🏪", label: "STORE" },
-  "/merchandising": { icon: "📋", label: "MERCHANDISING" },
-  "/shipment": { icon: "🚢", label: "SHIPMENT" },
+  "/": { icon: "📋", label: "Production" },
+  "/cutting": { icon: "✂️", label: "Cutting" },
+  "/sewing": { icon: "🧵", label: "Sewing" },
+  "/finishing": { icon: "💧", label: "Finishing" },
+  "/quality": { icon: "✅", label: "Quality" },
+  "/store": { icon: "📦", label: "Store" },
+  "/merchandising": { icon: "🛍️", label: "Merchandising" },
+  "/shipment": { icon: "🚢", label: "Shipment" },
   "/kpis": { icon: "📊", label: "KPIs" },
 };
 
@@ -30,33 +30,35 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-background">
       <NavRail />
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="h-12 bg-sidebar border-b border-border flex items-center px-4 gap-3 flex-shrink-0">
-          <span className="text-foreground text-sm font-bold">
-            {mod.icon} {mod.label} MODULE
-          </span>
+        <div className="h-14 bg-card/80 backdrop-blur-xl border-b border-border flex items-center px-5 gap-4 flex-shrink-0">
+          <h1 className="text-foreground text-[15px] font-semibold tracking-tight">
+            {mod.icon} {mod.label}
+          </h1>
           <div className="flex-1" />
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-success" style={{ animation: "pulse-dot 2s infinite" }} />
-            <span className="text-success text-[10px]">LIVE</span>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-success" style={{ animation: "pulse-dot 2s infinite" }} />
+            <span className="text-success text-[12px] font-medium">Live</span>
           </div>
-          <span className="text-muted-foreground text-[10px] font-mono">
+          <span className="text-muted-foreground text-[12px] font-medium tabular-nums">
             {time.toLocaleTimeString()}
           </span>
-          <div className="bg-destructive text-destructive-foreground rounded-full w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold">
-            4
+          <div className="flex items-center gap-1.5">
+            <span className="text-muted-foreground text-[14px]">🔔</span>
+            <div className="bg-destructive text-destructive-foreground rounded-full w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold">
+              4
+            </div>
           </div>
-          <span className="text-muted-foreground text-[12px]">🔔</span>
-          <div className="bg-secondary rounded-md px-2 py-0.5 text-[11px] text-muted-foreground">
-            🏭 W&W Denim Ltd
+          <div className="bg-secondary rounded-full px-3 py-1.5 text-[12px] text-foreground font-medium">
+            W&W Denim Ltd
           </div>
         </div>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto p-3.5">
+        <main className="flex-1 overflow-auto p-5">
           {children}
         </main>
 

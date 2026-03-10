@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ["'Source Sans 3'", "sans-serif"],
-        display: ["'Roboto Slab'", "serif"],
+        body: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        display: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        warning: "hsl(var(--color-warning))",
+        success: "hsl(var(--color-success))",
+        info: "hsl(var(--color-info))",
+        cyan: "hsl(var(--color-cyan))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -66,6 +70,11 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        "apple": "0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)",
+        "apple-md": "0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)",
+        "apple-lg": "0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.06)",
       },
       keyframes: {
         "accordion-down": {
