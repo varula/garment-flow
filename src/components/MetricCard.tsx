@@ -1,22 +1,22 @@
-import { ReactNode } from "react";
-
 interface MetricCardProps {
   label: string;
   value: string | number;
-  detail?: string;
-  children?: ReactNode;
+  sub?: string;
+  icon?: string;
+  colorClass?: string;
 }
 
-export function MetricCard({ label, value, detail }: MetricCardProps) {
+export function MetricCard({ label, value, sub, icon, colorClass = "text-primary" }: MetricCardProps) {
   return (
-    <div className="bg-card border border-border rounded-md p-5">
-      <p className="text-sm text-muted-foreground font-body font-semibold uppercase tracking-wide mb-1">
-        {label}
-      </p>
-      <p className="text-3xl font-display font-light text-foreground">{value}</p>
-      {detail && (
-        <p className="text-xs text-muted-foreground mt-1">{detail}</p>
-      )}
+    <div className="bg-card border border-border rounded-lg px-4 py-3.5">
+      <div className="flex justify-between items-start">
+        <div>
+          <div className="text-muted-foreground text-[11px] uppercase tracking-wider mb-1 font-semibold">{label}</div>
+          <div className={`text-[22px] font-bold ${colorClass}`}>{value}</div>
+          {sub && <div className={`text-[11px] mt-0.5 ${colorClass}`}>{sub}</div>}
+        </div>
+        {icon && <span className="text-[22px]">{icon}</span>}
+      </div>
     </div>
   );
 }

@@ -1,78 +1,66 @@
+import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import {
-  LayoutDashboard,
-  ClipboardList,
-  Package,
-  Factory,
-  Truck,
-  Search,
-  User,
-} from "lucide-react";
 
-const navItems = [
-  { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/orders", icon: ClipboardList, label: "Orders" },
-  { to: "/inventory", icon: Package, label: "Inventory" },
-  { to: "/production", icon: Factory, label: "Production" },
-  { to: "/shipping", icon: Truck, label: "Shipping" },
+const MODULES = [
+  { id: "/", label: "Production", icon: "🏭" },
+  { id: "/cutting", label: "Cutting", icon: "✂️" },
+  { id: "/sewing", label: "Sewing", icon: "🧵" },
+  { id: "/finishing", label: "Finishing", icon: "💧" },
+  { id: "/quality", label: "Quality", icon: "✅" },
+  { id: "/store", label: "Store", icon: "🏪" },
+  { id: "/merchandising", label: "Merch.", icon: "📋" },
+  { id: "/shipment", label: "Shipment", icon: "🚢" },
+  { id: "/kpis", label: "KPIs", icon: "📊" },
 ];
 
 export function NavRail() {
   const location = useLocation();
+  const [open, setOpen] = useState(true);
 
   return (
-    <nav className="w-[220px] min-w-[220px] bg-card border-r border-border flex flex-col h-screen">
-      {/* Brand */}
-      <div className="px-5 py-5 border-b border-border">
-        <h1 className="text-lg font-light tracking-wide font-display text-foreground">
-          Atelier Fil
-        </h1>
-        <p className="text-xs text-muted-foreground font-body mt-0.5">
-          Garment ERP
-        </p>
+    <nav
+      className="flex flex-col h-screen bg-sidebar border-r border-border flex-shrink-0 transition-all duration-300 overflow-hidden"
+      style={{ width: open ? 180 : 52 }}
+    >
+      {/* Logo */}
+      <div className="px-3 py-4 border-b border-border flex items-center gap-2.5 flex-shrink-0">
+        <span className="text-xl flex-shrink-0">🌀</span>
+        {open && (
+          <div>
+            <div className="text-primary text-[13px] font-bold leading-none">DENIM</div>
+            <div className="text-muted-foreground text-[9px] tracking-[2px] uppercase">ERP v2.0</div>
+          </div>
+        )}
       </div>
 
-      {/* Search */}
-      <div className="px-4 py-3 border-b border-border">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-accent text-muted-foreground text-sm">
-          <Search size={15} />
-          <span>Search…</span>
-        </div>
-      </div>
-
-      {/* Navigation items */}
-      <div className="flex-1 py-3 px-3 space-y-1">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.to;
+      {/* Navigation */}
+      <div className="flex-1 py-2 px-1.5 overflow-y-auto">
+        {MODULES.map(m => {
+          const isActive = location.pathname === m.id;
           return (
             <Link
-              key={item.to}
-              to={item.to}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold font-body transition-colors ${
+              key={m.id}
+              to={m.id}
+              className={`w-full flex items-center gap-2.5 px-2 py-2.5 rounded-md mb-0.5 text-[12px] transition-all text-left no-underline ${
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-foreground hover:bg-accent"
+                  ? "bg-primary/15 border border-primary/40 text-primary font-bold"
+                  : "border border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              <item.icon size={18} />
-              <span>{item.label}</span>
+              <span className="text-base flex-shrink-0">{m.icon}</span>
+              {open && <span className="whitespace-nowrap">{m.label}</span>}
             </Link>
           );
         })}
       </div>
 
-      {/* User */}
-      <div className="px-4 py-4 border-t border-border">
-        <div className="flex items-center gap-3 text-sm text-foreground">
-          <div className="w-8 h-8 rounded-md bg-accent flex items-center justify-center">
-            <User size={16} />
-          </div>
-          <div>
-            <p className="font-semibold text-sm">Floor Manager</p>
-            <p className="text-xs text-muted-foreground">Operations</p>
-          </div>
-        </div>
-      </div>
+      {/* Collapse */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="py-2.5 border-t border-border bg-transparent text-muted-foreground cursor-pointer text-base flex items-center justify-center hover:text-foreground transition-colors"
+      >
+        {open ? "◀" : "▶"}
+      </button>
     </nav>
   );
 }
