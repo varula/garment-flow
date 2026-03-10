@@ -1,64 +1,83 @@
+import { useState } from "react";
 import AppLayout from "../components/AppLayout";
 import { MetricCard } from "../components/MetricCard";
 import { StatusBadge } from "../components/StatusBadge";
+import { DataTable, Tr, Td } from "../components/DataTable";
+import { DetailPanel, DetailRow } from "../components/DetailPanel";
+import { shipmentData, fmt } from "../data/erpData";
 
-const shipments = [
-  { id: "SHP-0341", order: "PO-0887", client: "Mango ES", destination: "Barcelona, Spain", units: 900, carrier: "DHL Express", eta: "Mar 12", status: "active" as const },
-  { id: "SHP-0340", order: "PO-0885", client: "Primark", destination: "Dublin, Ireland", units: 4000, carrier: "Maersk", eta: "Mar 28", status: "pending" as const },
-  { id: "SHP-0339", order: "PO-0884", client: "COS EU", destination: "Stockholm, Sweden", units: 1800, carrier: "DHL Express", eta: "Mar 08", status: "complete" as const },
-  { id: "SHP-0338", order: "PO-0882", client: "Asos UK", destination: "London, UK", units: 3200, carrier: "FedEx", eta: "Mar 15", status: "delayed" as const },
-];
+const Shipment = () => {
+  const [sel, setSel] = useState(shipmentData[0]);
 
-const Shipping = () => {
   return (
     <AppLayout>
-      <div className="max-w-5xl">
-        <h1 className="text-2xl font-display font-light text-foreground mb-1">Shipping</h1>
-        <p className="text-sm text-muted-foreground mb-6">Outbound logistics and delivery tracking</p>
-
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          <MetricCard label="In Transit" value={4} detail="Across 3 carriers" />
-          <MetricCard label="Pending Pickup" value={2} detail="Scheduled this week" />
-          <MetricCard label="Delivered (MTD)" value={11} detail="28,400 units" />
-          <MetricCard label="Delayed" value={1} detail="SHP-0338" />
-        </div>
-
-        <div className="bg-card border border-border rounded-md">
-          <div className="px-5 py-4 border-b border-border">
-            <h2 className="text-sm font-semibold font-body uppercase tracking-wide text-foreground">Shipments</h2>
+      <div className="flex gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="grid grid-cols-4 gap-2.5 mb-3.5">
+            <MetricCard label="Total Shipments" value={shipmentData.length} colorClass="text-primary" />
+            <MetricCard label="In Transit" value={shipmentData.filter(s => s.status === "In Transit").length} colorClass="text-warning" />
+            <MetricCard label="Units Shipped" value={fmt(shipmentData.reduce((s, sh) => s + sh.packed, 0))} colorClass="text-success" />
+            <MetricCard label="Pending Docs" value={`${shipmentData.filter(s => !s.docs.bl).length} POs`} colorClass="text-destructive" />
           </div>
-          <table className="w-full text-sm font-body">
-            <thead>
-              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
-                <th className="px-5 py-3 font-semibold">Shipment</th>
-                <th className="px-5 py-3 font-semibold">Order</th>
-                <th className="px-5 py-3 font-semibold">Client</th>
-                <th className="px-5 py-3 font-semibold">Destination</th>
-                <th className="px-5 py-3 font-semibold text-right">Units</th>
-                <th className="px-5 py-3 font-semibold">Carrier</th>
-                <th className="px-5 py-3 font-semibold">ETA</th>
-                <th className="px-5 py-3 font-semibold">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shipments.map((s) => (
-                <tr key={s.id} className="border-b border-border last:border-b-0 hover:bg-accent/50 cursor-pointer transition-colors">
-                  <td className="px-5 py-3 font-semibold text-primary">{s.id}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{s.order}</td>
-                  <td className="px-5 py-3">{s.client}</td>
-                  <td className="px-5 py-3">{s.destination}</td>
-                  <td className="px-5 py-3 text-right tabular-nums">{s.units.toLocaleString()}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{s.carrier}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{s.eta}</td>
-                  <td className="px-5 py-3"><StatusBadge status={s.status} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          <DataTable title="Shipment Tracker" headers={["SHP #", "PO #", "Buyer", "Style", "ETD", "ETA", "Container", "Qty", "Packed", "Cartons", "CI", "PL", "B/L", "COO", "Status"]}>
+            {shipmentData.map((s, i) => (
+              <Tr key={s.id} onClick={() => setSel(s)} selected={sel?.id === s.id} index={i}>
+                <Td className="text-primary font-semibold text-[11px]">{s.id}</Td>
+                <Td className="text-muted-foreground text-[11px]">{s.po}</Td>
+                <Td className="text-foreground text-[11px]">{s.buyer}</Td>
+                <Td className="text-muted-foreground font-mono text-[11px]">{s.style}</Td>
+                <Td className="text-muted-foreground text-[11px]">{s.etd}</Td>
+                <Td className="text-muted-foreground text-[11px]">{s.eta}</Td>
+                <Td className="text-muted-foreground text-[11px] font-mono">{s.container}</Td>
+                <Td className="text-foreground text-[11px]">{fmt(s.qty)}</Td>
+                <Td className="text-foreground text-[11px] font-semibold">{fmt(s.packed)}</Td>
+                <Td className="text-muted-foreground text-[11px]">{s.cartons}</Td>
+                {(["ci", "pl", "bl", "coo"] as const).map(d => (
+                  <Td key={d} className="text-center text-[13px]">
+                    <span className={s.docs[d] ? "text-success" : "text-destructive"}>{s.docs[d] ? "✓" : "✗"}</span>
+                  </Td>
+                ))}
+                <Td><StatusBadge label={s.status} /></Td>
+              </Tr>
+            ))}
+          </DataTable>
         </div>
+
+        {sel && (
+          <DetailPanel title="Shipment Detail" subtitle={
+            <>
+              <div className="text-foreground text-[15px] font-bold">{sel.id}</div>
+              <div className="mb-2.5"><StatusBadge label={sel.status} /></div>
+            </>
+          }>
+            <DetailRow label="PO" value={sel.po} />
+            <DetailRow label="Buyer" value={sel.buyer} />
+            <DetailRow label="Style" value={sel.style} />
+            <DetailRow label="ETD" value={sel.etd} />
+            <DetailRow label="ETA" value={sel.eta} />
+            <DetailRow label="Container" value={sel.container} />
+            <DetailRow label="Total Qty" value={fmt(sel.qty)} />
+            <DetailRow label="Packed" value={fmt(sel.packed)} />
+            <DetailRow label="Balance" value={fmt(sel.qty - sel.packed)} />
+            <DetailRow label="Cartons" value={sel.cartons} />
+            <DetailRow label="Mode" value={sel.mode} />
+            <div className="mt-3">
+              <div className="text-muted-foreground text-[10px] uppercase mb-1.5">Document Status</div>
+              {([["Commercial Invoice", "ci"], ["Packing List", "pl"], ["Bill of Lading", "bl"], ["Certificate of Origin", "coo"]] as const).map(([name, key]) => (
+                <div key={key} className="flex justify-between py-1.5 border-b border-border">
+                  <span className="text-muted-foreground text-[11px]">{name}</span>
+                  <span className={`text-[12px] ${sel.docs[key] ? "text-success" : "text-destructive"}`}>
+                    {sel.docs[key] ? "✓ Ready" : "✗ Pending"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </DetailPanel>
+        )}
       </div>
     </AppLayout>
   );
 };
 
-export default Shipping;
+export default Shipment;
